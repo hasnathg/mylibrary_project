@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book List</title>
+</head>
+<body>
+    <h1>All Books</h1>
+    {% if all_books %}
+        <ul>
+            {% for book in all_books %}
+               <li>
+                   <strong>
+                        {{ book.title }}
+                        {% if book.published_year %}
+                            {% if book.published_year > 2000 %}
+                                (Modern)
+                            {% else %}
+                                (Classic)
+                            {% endif %}
+                        {% else %}
+                            (Year unknown)
+                        {% endif %}
+                    </strong>
+                    <br>
+
+                    <em>by {{book.author}}</em>
+                    <br>
+
+                    {% if book.published_year %}
+                        Published: {{ book.published_year }}
+                        <br>
+                    {% endif %}
+
+                    {% if book.price %}
+                        Price: £{{ book.price }}
+                        <br>
+                    {% endif %}
+
+                    {% if book.available %}
+                        <span>Availability: In stock</span>
+                    {% else %}
+                        <span>Availability: Not available </span>
+                    {% endif %}
+                    <br>
+
+                    {% if book.description %}
+                        <p>{{ book.description }}</p>
+                    {% endif %}
+
+                    {% if book.cover_image %}
+                        <img src="{{ book.cover_image }}" alt="{{ book.title }} cover" style="max-width: 150px;">
+                    {% endif %}
+
+               </li>
+               <hr>
+            {% endfor %}
+        </ul>
+    {% else %}
+       <p>No books found.</p>
+    {% endif %}
+
+    
+</body>
+</html>
