@@ -1,0 +1,39 @@
+{% if page_obj.paginator.num_pages > 1 %}
+    <nav aria-label="Book list pagination" style="margin-top: 1.5rem; text-align: center;">
+
+        <div style="font-size: 14px; color: #555;">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </div>
+
+        <div style="margin-top: 0.8rem;">
+
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if current_query %}&q={{ current_query|urlencode }}{% endif %}{% if current_status %}&status={{ current_status|urlencode }}{% endif %}"
+                   style="padding: 6px 12px; border: 1px solid #ccc; margin-right: 4px;
+                          text-decoration: none; color: #333; border-radius: 4px;">
+                    &laquo; First
+                </a>
+
+                <a href="?page={{ page_obj.previous_page_number }}{% if current_query %}&q={{ current_query|urlencode }}{% endif %}{% if current_status %}&status={{ current_status|urlencode }}{% endif %}"
+                   style="padding: 6px 12px; border: 1px solid #ccc; margin-right: 8px;
+                          text-decoration: none; color: #333; border-radius: 4px;">
+                    Previous
+                </a>
+            {% endif %}
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if current_query %}&q={{ current_query|urlencode }}{% endif %}{% if current_status %}&status={{ current_status|urlencode }}{% endif %}"
+                   style="padding: 6px 12px; border: 1px solid #ccc; margin-right: 4px;
+                          text-decoration: none; color: #333; border-radius: 4px;">
+                    Next
+                </a>
+
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if current_query %}&q={{ current_query|urlencode }}{% endif %}{% if current_status %}&status={{ current_status|urlencode }}{% endif %}"
+                   style="padding: 6px 12px; border: 1px solid #ccc;
+                          text-decoration: none; color: #333; border-radius: 4px;">
+                    Last &raquo;
+                </a>
+            {% endif %}
+        </div>
+    </nav>
+{% endif %}

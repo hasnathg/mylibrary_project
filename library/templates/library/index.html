@@ -1,0 +1,33 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Home – Book Port{% endblock %}
+
+{% block content %}
+    <section>
+        <h2>Welcome to Book Port</h2>
+        <p>
+            Explore a curated selection of quality pre-owned books available for sale
+            or exchange. From timeless classics and modern bestsellers to 
+            in-demand programming guides, Book Port brings each title within easy reach.
+        </p>
+    </section>
+
+    <section>
+        <h3>Why Book Port?</h3>
+        <ul>
+            <li>Affordable pre-owned books in excellent condition.</li>
+            <li>A diverse catalogue featuring world literature and technical titles.</li>
+            <li>Clear details on every listing: year, description, price, condition, and availability.</li>
+            <li>A sustainable way to keep books circulating and reduce waste.</li>
+        </ul>
+    </section>
+
+    <section>
+        <h3>Start Exploring</h3>
+        <p>
+            Browse the full collection on the 
+            <a href="{% url 'book_list' %}">Books page</a> and discover your next great read 
+            or connect with someone for a book exchange.
+        </p>
+    </section>
+{% endblock %}

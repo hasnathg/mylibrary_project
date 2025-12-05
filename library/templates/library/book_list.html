@@ -1,18 +1,46 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Book List</title>
-</head>
-<body>
-    <h1>All Books</h1>
-    {% if all_books %}
-        <ul>
-            {% for book in all_books %}
-               <li>
+{% extends 'library/base.html' %}
+
+{% block title %}Books - Book Port{% endblock %}
+
+{% block content %}
+    <h2>All Books</h2>
+
+    <form method="get" style="margin-bottom: 1.5rem;">
+        <label for="search-q">Search by title or author:</label><br>
+        <input
+            id="search-q"
+            type="text"
+            name="q"
+            value="{{ current_query }}"
+            placeholder="e.g. Murakami, Clean Code"
+            style="width: 260px; padding: 4px; margin-bottom: 0.5rem;"
+        >
+
+        <br>
+
+        <label for="status">Availability:</label><br>
+        <select id="status" name="status" style="padding: 4px; margin-bottom: 0.5rem;">
+            <option value="" {% if not current_status %}selected{% endif %}>All</option>
+            <option value="available" {% if current_status == 'available' %}selected{% endif %}>Available only</option>
+            <option value="unavailable" {% if current_status == 'unavailable' %}selected{% endif %}>Unavailable only</option>
+        </select>
+
+        <br>
+
+        <button type="submit" style="padding: 4px 10px; margin-top: 0.5rem;">
+            Apply
+        </button>
+    </form>
+
+    {% if page_obj %}
+        <ul style="list-style: none; padding-left: 0;">
+            {% for book in page_obj %}
+               <li style="margin-bottom: 2rem;">
                    <strong>
+                    <a href="{% url 'book_detail' book.pk %}">
                         {{ book.title }}
+                    </a>
+                        
                         {% if book.published_year %}
                             {% if book.published_year > 2000 %}
                                 (Modern)
@@ -57,9 +85,12 @@
                <hr>
             {% endfor %}
         </ul>
+
+        {% include 'library/pagination.html' with page_obj=page_obj %}
     {% else %}
        <p>No books found.</p>
     {% endif %}
+{% endblock %}
 
     
 </body>
