@@ -1,0 +1,61 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Suggest a Book – Book Port{% endblock %}
+
+{% block content %}
+    <h2>Suggest a Book</h2>
+    <p>
+        Know a great title that should be available on Book Port?
+        Use the form below to suggest it for inclusion in our catalogue.
+    </p>
+
+    <form method="post" style="max-width: 500px;">
+        {% csrf_token %}
+
+        {{ form.non_field_errors }}
+
+        <div style="margin-bottom: 0.8rem;">
+            {{ form.name.label_tag }}<br>
+            {{ form.name }}
+            {% if form.name.errors %}
+                <div style="color: red;">{{ form.name.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 0.8rem;">
+            {{ form.email.label_tag }}<br>
+            {{ form.email }}
+            {% if form.email.errors %}
+                <div style="color: red;">{{ form.email.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 0.8rem;">
+            {{ form.suggested_title.label_tag }}<br>
+            {{ form.suggested_title }}
+            {% if form.suggested_title.errors %}
+                <div style="color: red;">{{ form.suggested_title.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 0.8rem;">
+            {{ form.suggested_author.label_tag }}<br>
+            {{ form.suggested_author }}
+            {% if form.suggested_author.errors %}
+                <div style="color: red;">{{ form.suggested_author.errors }}</div>
+            {% endif %}
+        </div>
+
+        <div style="margin-bottom: 0.8rem;">
+            {{ form.message.label_tag }}<br>
+            {{ form.message }}
+            {% if form.message.errors %}
+                <div style="color: red;">{{ form.message.errors }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" style="padding: 0.5rem 1rem;">
+            Submit suggestion
+        </button>
+    </form>
+{% endblock %}

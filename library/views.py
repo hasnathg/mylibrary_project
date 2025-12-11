@@ -1,10 +1,14 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import Book
+from .models import Book, BookSuggestion, BookInquiry
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
-from .forms import BookInquiryForm
+from django.views.generic.edit import CreateView
+from django.urls import reverse_lazy
+from .forms import BookInquiryForm, BookSuggestionForm
 from django.db.models import Q
+
+
 
 # Create your views here.
 class BookListView(ListView):
@@ -54,11 +58,13 @@ class BookDetailView(DetailView):
 
         if form.is_valid():
 
+            inquiry = form.save(commit=False)
+            inquiry.book = self.object
+            inquiry.save()
+
             context = self.get_context_data()
             context['form'] = BookInquiryForm() 
             context['success'] = True
-            context['submitted_data'] = form.cleaned_data 
-
             return self.render_to_response(context)
         
         else:
@@ -66,6 +72,13 @@ class BookDetailView(DetailView):
             context['form'] = form
             context['success'] = False
             return self.render_to_response(context)
+        
+class BookSuggestionCreateView(CreateView):
+    model = BookSuggestion
+    form_class = BookSuggestionForm
+    template_name = 'library/suggest_book.html'
+    success_url = reverse_lazy('suggest_thanks')
+
 
 
 
@@ -90,6 +103,9 @@ def about_view(request):
 
 def home_view(request):
     return render(request, 'library/index.html')
+
+def suggestion_thanks_view(request):
+    return render (request, 'library/suggest_thanks.html')
 
 # def book_detail_view(request, pk):
 #     book = get_object_or_404(Book, pk =pk)

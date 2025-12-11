@@ -1,0 +1,16 @@
+{% extends 'library/base.html' %}
+
+{% block title %}Thank You – Book Port{% endblock %}
+
+{% block content %}
+    <h2>Thank you for your suggestion</h2>
+    <p>
+        We’ve received your book suggestion and will review it shortly.
+        If it’s a good fit for Book Port, we’ll look to add it to the catalogue.
+    </p>
+
+    <p>
+        In the meantime, you can continue browsing our existing selection on the
+        <a href="{% url 'book_list' %}">Books page</a>.
+    </p>
+{% endblock %}
