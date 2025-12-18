@@ -13,7 +13,7 @@ class BookInquiryForm(forms.ModelForm):
         fields = ['name', 'email', 'inquiry_type', 'message']
         labels={
             'name': 'Your name',
-            'email': 'Your name',
+            'email': 'Your email',
             'inquiry_type': 'What you like to do?',
             'message': 'Message',
         }

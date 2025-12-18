@@ -3,59 +3,56 @@
 {% block title %}Suggest a Book – Book Port{% endblock %}
 
 {% block content %}
-    <h2>Suggest a Book</h2>
-    <p>
-        Know a great title that should be available on Book Port?
-        Use the form below to suggest it for inclusion in our catalogue.
+  <h2 class="page-title">Suggest a Book</h2>
+
+  <div class="card" style="margin-bottom: 1rem;">
+    <p class="meta" style="margin:0;">
+      Suggest a title you’d like to see on Book Port. If it’s a strong fit, we’ll review it for inclusion.
     </p>
+  </div>
 
-    <form method="post" style="max-width: 500px;">
-        {% csrf_token %}
+  <div class="form-card">
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
 
-        {{ form.non_field_errors }}
-
-        <div style="margin-bottom: 0.8rem;">
-            {{ form.name.label_tag }}<br>
-            {{ form.name }}
-            {% if form.name.errors %}
-                <div style="color: red;">{{ form.name.errors }}</div>
-            {% endif %}
+      <div class="form-grid">
+        <div class="field">
+          {{ form.name.label_tag }}
+          {{ form.name }}
+          {{ form.name.errors }}
         </div>
 
-        <div style="margin-bottom: 0.8rem;">
-            {{ form.email.label_tag }}<br>
-            {{ form.email }}
-            {% if form.email.errors %}
-                <div style="color: red;">{{ form.email.errors }}</div>
-            {% endif %}
+        <div class="field">
+          {{ form.email.label_tag }}
+          {{ form.email }}
+          {{ form.email.errors }}
+        </div>
+      </div>
+
+      <div class="form-grid" style="margin-top:.9rem;">
+        <div class="field">
+          {{ form.suggested_title.label_tag }}
+          {{ form.suggested_title }}
+          {{ form.suggested_title.errors }}
         </div>
 
-        <div style="margin-bottom: 0.8rem;">
-            {{ form.suggested_title.label_tag }}<br>
-            {{ form.suggested_title }}
-            {% if form.suggested_title.errors %}
-                <div style="color: red;">{{ form.suggested_title.errors }}</div>
-            {% endif %}
+        <div class="field">
+          {{ form.suggested_author.label_tag }}
+          {{ form.suggested_author }}
+          {{ form.suggested_author.errors }}
         </div>
+      </div>
 
-        <div style="margin-bottom: 0.8rem;">
-            {{ form.suggested_author.label_tag }}<br>
-            {{ form.suggested_author }}
-            {% if form.suggested_author.errors %}
-                <div style="color: red;">{{ form.suggested_author.errors }}</div>
-            {% endif %}
-        </div>
+      <div class="field" style="margin-top:.9rem;">
+        {{ form.message.label_tag }}
+        {{ form.message }}
+        {{ form.message.errors }}
+      </div>
 
-        <div style="margin-bottom: 0.8rem;">
-            {{ form.message.label_tag }}<br>
-            {{ form.message }}
-            {% if form.message.errors %}
-                <div style="color: red;">{{ form.message.errors }}</div>
-            {% endif %}
-        </div>
-
-        <button type="submit" style="padding: 0.5rem 1rem;">
-            Submit suggestion
-        </button>
+      <div style="margin-top: 1rem;">
+        <button class="btn btn-primary" type="submit">Submit suggestion</button>
+      </div>
     </form>
+  </div>
 {% endblock %}

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from .models import Book, BookSuggestion, BookInquiry
+from .models import Book, BookSuggestion, BookInquiry, Category
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import ListView, DetailView
 from django.views.generic.edit import CreateView
@@ -22,6 +22,7 @@ class BookListView(ListView):
         queryset = super().get_queryset()
         q = self.request.GET.get('q', '').strip()
         status = self.request.GET.get('status', '').strip() 
+        category = self.request.GET.get('category', '').strip()
 
         if q:
             queryset = queryset.filter(
@@ -32,12 +33,18 @@ class BookListView(ListView):
         elif status == 'unavailable':
             queryset = queryset.filter(available=False)
 
-        return queryset
+        if category:
+            queryset = queryset.filter(categories__slug=category)
+
+        return queryset.distinct()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_query'] = self.request.GET.get('q', '').strip()
         context['current_status'] = self.request.GET.get('status', '').strip()
+        context['categories'] = Category.objects.order_by('name')
+        context['current_category'] = self.request.GET.get('category', '').strip()
+
         return context
 
 class BookDetailView(DetailView):    
@@ -102,7 +109,14 @@ def about_view(request):
     return render(request, 'library/about.html')
 
 def home_view(request):
-    return render(request, 'library/index.html')
+    latest_books = Book.objects.order_by('-id')[:6]
+    modern_books = Book.objects.filter(published_year__gt=2000).order_by('-published_year')[:6]
+
+    context = {
+        "latest_books": latest_books,
+        "modern_books": modern_books,
+    }
+    return render(request, 'library/index.html', context)
 
 def suggestion_thanks_view(request):
     return render (request, 'library/suggest_thanks.html')

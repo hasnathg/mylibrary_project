@@ -1,33 +1,135 @@
 {% extends 'library/base.html' %}
 
-{% block title %}Home – Book Port{% endblock %}
+{% block title %}Book Port - buy, sell & exchange books{% endblock %}
 
 {% block content %}
-    <section>
-        <h2>Welcome to Book Port</h2>
-        <p>
-            Explore a curated selection of quality pre-owned books available for sale
-            or exchange. From timeless classics and modern bestsellers to 
-            in-demand programming guides, Book Port brings each title within easy reach.
-        </p>
-    </section>
+  <section class="hero">
+    <h2>Welcome to Book Port</h2>
+    <p class="muted">
+      Explore a curated selection of quality pre-owned books available for sale or exchange.
+      From timeless classics and modern bestsellers to in-demand programming guides, Book Port
+      brings each title within easy reach.
+    </p>
+    <p class="muted">
+      Search by title or author, filter by availability, and enquire about any book directly from its
+      detail page. You can also suggest new titles you’d like to see added to the platform.
+    </p>
 
-    <section>
-        <h3>Why Book Port?</h3>
-        <ul>
-            <li>Affordable pre-owned books in excellent condition.</li>
-            <li>A diverse catalogue featuring world literature and technical titles.</li>
-            <li>Clear details on every listing: year, description, price, condition, and availability.</li>
-            <li>A sustainable way to keep books circulating and reduce waste.</li>
-        </ul>
-    </section>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'book_list' %}">Browse all books &rarr;</a>
+      <a class="btn" href="{% url 'suggest_book' %}">Suggest a book &rarr;</a>
+    </div>
+  </section>
 
-    <section>
-        <h3>Start Exploring</h3>
-        <p>
-            Browse the full collection on the 
-            <a href="{% url 'book_list' %}">Books page</a> and discover your next great read 
-            or connect with someone for a book exchange.
-        </p>
-    </section>
+  <div class="section">
+    <h3>Recent arrivals</h3>
+
+    {% if latest_books %}
+      <div class="grid">
+        {% for book in latest_books %}
+          <div class="card">
+
+            <!-- Header -->
+            <div class="card-head">
+              <h4 class="card-title clamp-2">
+                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+              </h4>
+              <div class="meta">by {{ book.author }}</div>
+            </div>
+
+            <!-- Cover -->
+            {% if book.cover_image %}
+              <div class="cover-frame">
+                <img class="cover" src="{{ book.cover_image }}" alt="{{ book.title }} cover">
+              </div>
+            {% endif %}
+
+            <!-- Footer -->
+            <div class="card-bottom">
+              {% if book.categories.exists %}
+                <div class="badges">
+                  {% for cat in book.categories.all %}
+                    <span class="badge">{{ cat.name }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="meta">
+                {% if book.published_year %}Published: {{ book.published_year }}<br>{% endif %}
+                {% if book.price %}Price: £{{ book.price }}{% endif %}
+              </div>
+
+              <div class="badges">
+                {% if book.available %}
+                  <span class="badge badge-ok">In stock</span>
+                {% else %}
+                  <span class="badge badge-bad">Unavailable</span>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="meta">No books have been added yet. Check back soon.</p>
+    {% endif %}
+  </div>
+
+  <hr class="sep">
+
+  <div class="section">
+    <h3>Modern reads (published after 2000)</h3>
+
+    {% if modern_books %}
+      <div class="grid">
+        {% for book in modern_books %}
+          <div class="card">
+
+            <!-- Header -->
+            <div class="card-head">
+              <h4 class="card-title clamp-2">
+                <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+              </h4>
+              <div class="meta">by {{ book.author }}</div>
+            </div>
+
+            <!-- Cover -->
+            {% if book.cover_image %}
+              <div class="cover-frame">
+                <img class="cover" src="{{ book.cover_image }}" alt="{{ book.title }} cover">
+              </div>
+            {% endif %}
+
+            <!-- Footer -->
+            <div class="card-bottom">
+              {% if book.categories.exists %}
+                <div class="badges">
+                  {% for cat in book.categories.all %}
+                    <span class="badge">{{ cat.name }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="meta">
+                {% if book.published_year %}Published: {{ book.published_year }}<br>{% endif %}
+                {% if book.price %}Price: £{{ book.price }}{% endif %}
+              </div>
+
+              <div class="badges">
+                {% if book.available %}
+                  <span class="badge badge-ok">In stock</span>
+                {% else %}
+                  <span class="badge badge-bad">Unavailable</span>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="meta">No modern books found yet. Try adding some recent titles in the admin.</p>
+    {% endif %}
+  </div>
 {% endblock %}

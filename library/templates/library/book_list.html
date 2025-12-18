@@ -1,97 +1,116 @@
 {% extends 'library/base.html' %}
 
-{% block title %}Books - Book Port{% endblock %}
+{% block title %}Books – Book Port{% endblock %}
 
 {% block content %}
-    <h2>All Books</h2>
+  <h2 class="page-title">All Books</h2>
 
-    <form method="get" style="margin-bottom: 1.5rem;">
-        <label for="search-q">Search by title or author:</label><br>
-        <input
+  <div class="form-card" style="margin-bottom: 1.2rem;">
+    <form method="get">
+      <div class="form-grid">
+        <div class="field">
+          <label for="search-q">Search (title or author)</label>
+          <input
             id="search-q"
             type="text"
             name="q"
             value="{{ current_query }}"
             placeholder="e.g. Murakami, Clean Code"
-            style="width: 260px; padding: 4px; margin-bottom: 0.5rem;"
-        >
+          >
+        </div>
 
-        <br>
-
-        <label for="status">Availability:</label><br>
-        <select id="status" name="status" style="padding: 4px; margin-bottom: 0.5rem;">
+        <div class="field">
+          <label for="status">Availability</label>
+          <select id="status" name="status">
             <option value="" {% if not current_status %}selected{% endif %}>All</option>
             <option value="available" {% if current_status == 'available' %}selected{% endif %}>Available only</option>
             <option value="unavailable" {% if current_status == 'unavailable' %}selected{% endif %}>Unavailable only</option>
-        </select>
+          </select>
+        </div>
 
-        <br>
-
-        <button type="submit" style="padding: 4px 10px; margin-top: 0.5rem;">
-            Apply
-        </button>
-    </form>
-
-    {% if page_obj %}
-        <ul style="list-style: none; padding-left: 0;">
-            {% for book in page_obj %}
-               <li style="margin-bottom: 2rem;">
-                   <strong>
-                    <a href="{% url 'book_detail' book.pk %}">
-                        {{ book.title }}
-                    </a>
-                        
-                        {% if book.published_year %}
-                            {% if book.published_year > 2000 %}
-                                (Modern)
-                            {% else %}
-                                (Classic)
-                            {% endif %}
-                        {% else %}
-                            (Year unknown)
-                        {% endif %}
-                    </strong>
-                    <br>
-
-                    <em>by {{book.author}}</em>
-                    <br>
-
-                    {% if book.published_year %}
-                        Published: {{ book.published_year }}
-                        <br>
-                    {% endif %}
-
-                    {% if book.price %}
-                        Price: £{{ book.price }}
-                        <br>
-                    {% endif %}
-
-                    {% if book.available %}
-                        <span>Availability: In stock</span>
-                    {% else %}
-                        <span>Availability: Not available </span>
-                    {% endif %}
-                    <br>
-
-                    {% if book.description %}
-                        <p>{{ book.description }}</p>
-                    {% endif %}
-
-                    {% if book.cover_image %}
-                        <img src="{{ book.cover_image }}" alt="{{ book.title }} cover" style="max-width: 150px;">
-                    {% endif %}
-
-               </li>
-               <hr>
+        <div class="field">
+          <label for="category">Category</label>
+          <select id="category" name="category">
+            <option value="" {% if not current_category %}selected{% endif %}>All categories</option>
+            {% for c in categories %}
+              <option value="{{ c.slug }}" {% if current_category == c.slug %}selected{% endif %}>
+                {{ c.name }}
+              </option>
             {% endfor %}
-        </ul>
+          </select>
+        </div>
 
-        {% include 'library/pagination.html' with page_obj=page_obj %}
-    {% else %}
-       <p>No books found.</p>
-    {% endif %}
+        <div class="field" style="display:flex; align-items:flex-end;">
+          <button class="btn btn-primary" type="submit">Apply filters</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  {% if page_obj %}
+    <div class="grid">
+      {% for book in page_obj %}
+        <div class="card">
+
+          <!-- Header -->
+          <div class="card-head">
+            <h3 class="card-title clamp-2">
+              <a href="{% url 'book_detail' book.pk %}">{{ book.title }}</a>
+              <span class="meta">
+                —
+                {% if book.published_year %}
+                  {% if book.published_year > 2000 %}(Modern){% else %}(Classic){% endif %}
+                {% else %}
+                  (Year unknown)
+                {% endif %}
+              </span>
+            </h3>
+            <div class="meta">by {{ book.author }}</div>
+          </div>
+
+          <!-- Cover -->
+          {% if book.cover_image %}
+            <div class="cover-frame">
+              <img class="cover" src="{{ book.cover_image }}" alt="{{ book.title }} cover">
+            </div>
+          {% endif %}
+
+          <!-- Footer -->
+          <div class="card-bottom">
+
+            {% if book.categories.exists %}
+              <div class="badges">
+                {% for cat in book.categories.all %}
+                  <span class="badge">{{ cat.name }}</span>
+                {% endfor %}
+              </div>
+            {% endif %}
+
+            {% if book.description %}
+              <p class="meta clamp-3">{{ book.description }}</p>
+            {% endif %}
+
+            <div class="meta">
+              {% if book.published_year %}Published: {{ book.published_year }}<br>{% endif %}
+              {% if book.price %}Price: £{{ book.price }}{% endif %}
+            </div>
+
+            <div class="badges">
+              {% if book.available %}
+                <span class="badge badge-ok">In stock</span>
+              {% else %}
+                <span class="badge badge-bad">Unavailable</span>
+              {% endif %}
+            </div>
+
+          </div>
+
+        </div>
+      {% endfor %}
+    </div>
+
+    {% include 'library/pagination.html' with page_obj=page_obj %}
+  {% else %}
+    <p class="meta">No books found.</p>
+  {% endif %}
 {% endblock %}
-
-    
-</body>
-</html>

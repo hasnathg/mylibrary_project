@@ -3,14 +3,16 @@
 {% block title %}Thank You – Book Port{% endblock %}
 
 {% block content %}
-    <h2>Thank you for your suggestion</h2>
-    <p>
-        We’ve received your book suggestion and will review it shortly.
-        If it’s a good fit for Book Port, we’ll look to add it to the catalogue.
+  <h2 class="page-title">Thank you</h2>
+
+  <div class="card">
+    <p class="meta">
+      We’ve received your suggestion and will review it shortly. If it’s a good fit, we’ll aim to add it to the catalogue.
     </p>
 
-    <p>
-        In the meantime, you can continue browsing our existing selection on the
-        <a href="{% url 'book_list' %}">Books page</a>.
-    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'book_list' %}">Browse books →</a>
+      <a class="btn" href="{% url 'home' %}">Back to home →</a>
+    </div>
+  </div>
 {% endblock %}

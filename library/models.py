@@ -1,6 +1,13 @@
 from django.db import models
 
 # Create your models here.
+
+class Category(models.Model):
+    name = models.CharField(max_length=80, unique=True)
+    slug = models.SlugField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.name
 class Book(models.Model):
     title = models.CharField(max_length=200)
     author = models.CharField(max_length=200)
@@ -12,13 +19,16 @@ class Book(models.Model):
         null=True,
         blank=True
     )
-
+    
     available = models.BooleanField(default=True)
-
     cover_image = models.URLField(max_length=500, blank=True)
+
+    categories = models.ManyToManyField(Category, blank=True, related_name= 'books' )
+
 
     def __str__(self):
         return f"{self.title} by {self.author}"
+
 
 class BookSuggestion(models.Model):
     SUGGESTION_STATUS_CHOICES = [

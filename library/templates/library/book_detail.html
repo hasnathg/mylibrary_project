@@ -3,96 +3,104 @@
 {% block title %}{{ book.title }} – Book Port{% endblock %}
 
 {% block content %}
-    <article>
-        <h2>{{ book.title }}</h2>
-        <p><em>by {{ book.author }}</em></p>
+  <div class="card">
+    <h2 class="page-title" style="margin-bottom:.2rem;">{{ book.title }}</h2>
+    <div class="meta">by {{ book.author }}</div>
 
-        {% if book.cover_image %}
-            <img src="{{ book.cover_image }}"
-                 alt="{{ book.title }} cover"
-                 style="max-width: 200px; margin-bottom: 1rem;">
-        {% endif %}
+    {% if book.categories.exists %}
+      <div class="badges" style="margin-top:.6rem;">
+        {% for cat in book.categories.all %}
+          <span class="badge">{{ cat.name }}</span>
+        {% endfor %}
+      </div>
+    {% endif %}
 
-        <ul>
-            {% if book.published_year %}
-                <li><strong>Published:</strong> {{ book.published_year }}</li>
-            {% endif %}
+    <div style="display:flex; gap:1.2rem; flex-wrap:wrap; margin-top: 1rem;">
+      {% if book.cover_image %}
+        <div>
+          <img class="cover-detail" src="{{ book.cover_image }}" alt="{{ book.title }} cover">
+        </div>
+      {% endif %}
 
-            {% if book.price %}
-                <li><strong>Price:</strong> £{{ book.price }}</li>
-            {% endif %}
+      <div class="meta" style="flex:1; min-width:260px;">
+        {% if book.published_year %}<div><strong>Published:</strong> {{ book.published_year }}</div>{% endif %}
+        {% if book.price %}<div><strong>Price:</strong> £{{ book.price }}</div>{% endif %}
 
-            <li>
-                <strong>Status:</strong>
-                {% if book.available %}
-                    Available for sale or exchange
-                {% else %}
-                    Currently unavailable
-                {% endif %}
-            </li>
-        </ul>
+        <div style="margin-top:.55rem;">
+          <strong>Status:</strong>
+          {% if book.available %}
+            <span class="badge badge-ok">Available for sale or exchange</span>
+          {% else %}
+            <span class="badge badge-bad">Currently unavailable</span>
+          {% endif %}
+        </div>
+      </div>
+    </div>
 
-        {% if book.description %}
-            <h3>Description</h3>
-            <p>{{ book.description }}</p>
-        {% endif %}
+    {% if book.description %}
+      <hr class="sep">
+      <h3 style="margin:.2rem 0 .5rem;">Description</h3>
+      <p class="meta">{{ book.description }}</p>
+    {% endif %}
 
-        <p>
-            <a href="{% url 'book_list' %}">&larr; Back to all books</a>
-        </p>
-    </article>
+    <div class="hero-actions" style="margin-top: 1rem;">
+      <a class="btn" href="{% url 'book_list' %}">← Back to all books</a>
+    </div>
+  </div>
 
-    <hr>
+  <div class="section">
+    <h3>Enquire about this book</h3>
 
-    <section style="margin-top: 2rem;">
-        <h3>Enquire about this book</h3>
+    {% if success %}
+      <div class="success">
+        Thank you for your enquiry. We’ll get back to you shortly.
+      </div>
+    {% endif %}
 
-        {% if success %}
-            <p style="color: green; font-weight: bold;">
-                Thank you for your enquiry. We’ll get back to you shortly.
-            </p>
-        {% endif %}
+    <div class="form-card">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
 
-        <form method="post">
-            {% csrf_token %}
+        <div class="form-grid">
+          <div class="field">
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+          </div>
 
-            {{ form.non_field_errors }}
+          <div class="field">
+            {{ form.email.label_tag }}
+            {{ form.email }}
+            {{ form.email.errors }}
+          </div>
+        </div>
 
-            <div style="margin-bottom: 0.8rem;">
-                {{ form.name.label_tag }}<br>
-                {{ form.name }}
-                {% if form.name.errors %}
-                    <div style="color: red;">{{ form.name.errors }}</div>
-                {% endif %}
-            </div>
+        <div class="field" style="margin-top:.9rem;">
+          {{ form.inquiry_type.label_tag }}
+          
+          <div class="choice-group">
+            {{ form.inquiry_type }}
+          </div>
+          {{ form.inquiry_type.errors }}
+           
+        <!-- <div class="choice-group">
+        {{ form.inquiry_type }}
+        </div>
+        {{ form.inquiry_type.errors }}
+        </div> -->
+        
 
-            <div style="margin-bottom: 0.8rem;">
-                {{ form.email.label_tag }}<br>
-                {{ form.email }}
-                {% if form.email.errors %}
-                    <div style="color: red;">{{ form.email.errors }}</div>
-                {% endif %}
-            </div>
+        <div class="field" style="margin-top:.9rem;">
+          {{ form.message.label_tag }}
+          {{ form.message }}
+          {{ form.message.errors }}
+        </div>
 
-            <div style="margin-bottom: 0.8rem;">
-                {{ form.inquiry_type.label_tag }}<br>
-                {{ form.inquiry_type }}
-                {% if form.inquiry_type.errors %}
-                    <div style="color: red;">{{ form.inquiry_type.errors }}</div>
-                {% endif %}
-            </div>
-
-            <div style="margin-bottom: 0.8rem;">
-                {{ form.message.label_tag }}<br>
-                {{ form.message }}
-                {% if form.message.errors %}
-                    <div style="color: red;">{{ form.message.errors }}</div>
-                {% endif %}
-            </div>
-
-            <button type="submit" style="padding: 0.5rem 1rem;">
-                Send enquiry
-            </button>
-        </form>
-    </section>
+        <div style="margin-top: 1rem;">
+          <button class="btn btn-primary" type="submit">Send enquiry</button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

@@ -3,30 +3,28 @@
 {% block title %}About – Book Port{% endblock %}
 
 {% block content %}
-    <h2>About Book Port</h2>
+  <h2 class="page-title">About Book Port</h2>
 
-    <p>
-        Book Port is an online destination for readers who want to buy, sell, 
-        or exchange books with ease. We bring together a diverse collection of
-        pre-owned classics, contemporary fiction, and specialised programming titles,
-        offering an affordable and sustainable way to discover your next great read.
+  <div class="card">
+    <p class="meta">
+      Book Port is a marketplace for readers who want to buy, sell, or exchange books without friction.
+      We focus on clear listings, honest availability, and simple enquiry workflows.
     </p>
 
-    <p>
-        Our platform is built around the idea of giving books a second life. 
-        Whether you're looking for a rare find, a favourite novel, or a practical 
-        technical guide, Book Port makes it simple to explore a growing catalogue
-        of well-maintained, pre-loved books from trusted owners.
+    <p class="meta">
+      From collectible classics to modern fiction and practical programming guides, each listing includes
+      key details such as publication year, price, availability, categories, and cover imagery to help you
+      decide quickly.
     </p>
 
-    <p>
-        Each title includes essential information—publication year, description,
-        price, availability status, and a cover image—so you can make informed 
-        decisions before purchasing or requesting an exchange.
+    <p class="meta">
+      Interested in a title? Open the book’s detail page and send an enquiry — whether you want to buy,
+      propose an exchange, or ask for more information. You can also suggest books you’d like to see added.
     </p>
 
-    <p>
-        Book Port is designed to be user-friendly, transparent, and community-focused,
-        helping readers connect through the books they love.
-    </p>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{% url 'book_list' %}">Browse books →</a>
+      <a class="btn" href="{% url 'suggest_book' %}">Suggest a book →</a>
+    </div>
+  </div>
 {% endblock %}
